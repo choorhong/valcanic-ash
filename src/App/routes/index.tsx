@@ -10,8 +10,7 @@ import ResetPassword from '../pages/auth/reset-password'
 import { PublicRoute, PrivateRoute } from './route'
 import ShipmentPage from '../pages/shipment'
 import BookingPage from '../pages/booking'
-import PurchaseOrderPage from '../pages/purchase-order'
-import ContactPage from '../pages/contact'
+import PurchaseOrderPage from '../pages/purchase-order/view'
 
 const AppRouter = () => {
   return (
@@ -36,10 +35,6 @@ const AppRouter = () => {
 
         <PrivateRoute path='/purchase-order'>
           <PurchaseOrderPage />
-        </PrivateRoute>
-
-        <PrivateRoute path='/contact'>
-          <ContactPage />
         </PrivateRoute>
 
         <PrivateRoute path='/'>

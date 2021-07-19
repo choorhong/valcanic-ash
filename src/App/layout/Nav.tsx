@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Layout, Menu } from 'antd'
-import { BuildOutlined, FileTextOutlined, FormOutlined, ContactsOutlined, SettingOutlined, UserOutlined, TeamOutlined, LogoutOutlined } from '@ant-design/icons'
+import { BuildOutlined, FileTextOutlined, FormOutlined, SettingOutlined, UserOutlined, TeamOutlined, LogoutOutlined } from '@ant-design/icons'
 import { useAuth } from '../hooks/auth-context'
 import { Link, useLocation } from 'react-router-dom'
 
@@ -40,9 +40,6 @@ const Nav: React.FC = (props) => {
           </Menu.Item>
           <Menu.Item key='purchase-order' icon={<FormOutlined />}>
             <Link to='/purchase-order'>Purchase Order</Link>
-          </Menu.Item>
-          <Menu.Item key='contact' icon={<ContactsOutlined />}>
-            <Link to='/contact'>Contact</Link>
           </Menu.Item>
 
           <SubMenu key='setting' title='Setting' icon={<SettingOutlined />}>

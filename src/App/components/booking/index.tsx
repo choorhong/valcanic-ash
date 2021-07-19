@@ -1,76 +1,73 @@
 import React from 'react'
-import { Table, Tag, Space } from 'antd'
+import { Table, Tag } from 'antd'
+import { Link } from 'react-router-dom'
 
 const columns = [
   {
-    title: 'Booking',
-    dataIndex: 'name',
-    key: 'name',
-    render: (text: any) => <a>{text}</a>
+    title: 'Booking No',
+    dataIndex: 'bookingNo',
+    key: 'booking',
+    render: (text: any) => <Link to='/booking'>{text}</Link>
   },
   {
-    title: 'Forwarder',
-    dataIndex: 'age',
-    key: 'age'
+    title: 'Departure',
+    key: 'departure',
+    dataIndex: 'departure',
+    render: (arrival: Record<any, any>) => {
+      return (
+        <>
+          <Tag color='geekblue'>
+            {arrival.date}
+          </Tag>
+          <Tag color='green'>
+            {arrival.location}
+          </Tag>
+        </>
+      )
+    }
   },
   {
-    title: 'ERD / Cut off',
-    key: 'tags',
-    dataIndex: 'tags',
-    render: (tags: any) => (
-      <>
-        {tags.map((tag: any) => {
-          let color = tag.length > 5 ? 'geekblue' : 'green'
-          if (tag === 'loser') {
-            color = 'volcano'
-          }
-          return (
-            <Tag color={color} key={tag}>
-              {tag.toUpperCase()}
-            </Tag>
-          )
-        })}
-      </>
-    )
-  },
-  {
-    title: 'Vessel',
-    dataIndex: 'address',
-    key: 'address'
-  },
-  {
-    title: 'Note',
-    key: 'action',
-    render: (text: string, record: any) => (
-      <Space size='middle'>
-        <a>Invite {record.name}</a>
-        <a>Delete</a>
-      </Space>
-    )
+    title: 'Arrival',
+    key: 'arrival',
+    dataIndex: 'arrival',
+    render: (arrival: Record<any, any>) => {
+      return (
+        <>
+          <Tag color='geekblue'>
+            {arrival.date}
+          </Tag>
+          <Tag color='volcano'>
+            {arrival.location}
+          </Tag>
+        </>
+      )
+    }
   }
 ]
 
 const data = [
   {
     key: '1',
-    name: 'John Brown',
-    age: 32,
-    address: 'New York',
-    tags: ['nice', 'developer']
+    bookingNo: 'ZRWV593355666',
+    departure: { date: '2021-07-13', location: 'Los Angeles, CA' },
+    arrival: { date: '2021-07-19', location: 'Penang, Malaysia' },
+    remarks: 'New York'
   },
   {
     key: '2',
-    name: 'Jim Green',
-    age: 42,
-    address: 'London No',
-    tags: ['loser']
+    bookingNo: 'YEJZ041336228',
+    departure: { date: '2021-07-13', location: 'Los Angeles, CA' },
+    arrival: { date: '2021-07-19', location: 'Penang, Malaysia' },
+    remarks: undefined
+
   },
   {
     key: '3',
-    name: 'Joe Black',
-    age: 32,
-    address: 'Sidney No',
-    tags: ['cool', 'teacher']
+    bookingNo: 'YEJZ041336228',
+    departure: { date: '2021-07-13', location: 'Los Angeles, CA' },
+    arrival: { date: '2021-07-19', location: 'Penang, Malaysia' },
+    remarks: 'Yup'
+
   }
 ]
 
