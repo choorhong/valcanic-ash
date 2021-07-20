@@ -1,10 +1,16 @@
 import React, { useState, useCallback } from 'react'
 import { Form, Input, Button, Select, Modal } from 'antd'
+import axios from 'axios'
+
+interface ICreatePurchaseOrderProps {
+  onSetOrder: React.Dispatch<React.SetStateAction<any[]>>;
+}
 
 const { Option } = Select
 const { TextArea } = Input
 
-const CreatePurchaseOrder = () => {
+const CreatePurchaseOrder: React.FC<ICreatePurchaseOrderProps> = (props) => {
+  const { onSetOrder } = props
   const [visible, setVisible] = useState<boolean>(false)
 
   const [form] = Form.useForm()
@@ -12,15 +18,22 @@ const CreatePurchaseOrder = () => {
   const handleOk = useCallback(async () => {
     try {
       const values = await form.validateFields()
-      console.log('values', values)
-      setVisible(false)
+      const result = await axios.post('http://localhost:8000/purchase-order/create', values)
+      if (result.status === 200 && result.data) {
+        onSetOrder(orders => {
+          const newOrders = [...orders]
+          newOrders.push(result.data)
+          return newOrders
+        })
+        setVisible(false)
+      }
     } catch (error) {
       console.log('value Error: ', error)
       form.setFields([
         ...error.errorFields
       ])
     }
-  }, [form])
+  }, [form, onSetOrder])
 
   const handleCancel = useCallback(
     () => {

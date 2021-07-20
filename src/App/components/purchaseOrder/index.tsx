@@ -1,6 +1,11 @@
 import React from 'react'
-import { Table, Tag, Space } from 'antd'
+import { Table, Tag } from 'antd'
 import { Link } from 'react-router-dom'
+
+interface IPurchaseOrderProps {
+  orders: any[];
+}
+
 const columns = [
   {
     title: 'Purchase Order',
@@ -34,38 +39,14 @@ const columns = [
   {
     title: 'Remarks',
     key: 'remarks',
-    render: (text: string, record: any) => (
-      <Space size='middle'>
-        Ha
-      </Space>
-    )
+    dataIndex: 'remarks'
   }
 ]
 
-const data = [
-  {
-    key: '1',
-    purchaseOrderNo: 'John Brown',
-    status: 'CREATED',
-    remarks: 'New York No. 1 Lake Park'
-  },
-  {
-    key: '2',
-    purchaseOrderNo: 'Jim Green',
-    status: 'FULFILLED',
-    remarks: 'London No. 1 Lake Park'
-  },
-  {
-    key: '3',
-    purchaseOrderNo: 'Joe Black',
-    status: 'CANCELLED',
-    remarks: 'Sidney No. 1 Lake Park'
-  }
-]
-
-const PurchaseOrder: React.FC = () => {
+const PurchaseOrder: React.FC<IPurchaseOrderProps> = (props) => {
+  const { orders } = props
   return (
-    <Table columns={columns} dataSource={data} />
+    <Table columns={columns} dataSource={orders} />
   )
 }
 
