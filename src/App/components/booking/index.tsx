@@ -12,7 +12,7 @@ const columns = [
     title: 'Booking No',
     dataIndex: 'bookingNo',
     key: 'booking',
-    render: (text: any) => <Link to='/booking'>{text}</Link>
+    render: (text: any) => <Link to={`/booking/${text}`} target='_blank'>{text}</Link>
   },
   {
     title: 'Departure',
@@ -54,7 +54,7 @@ const Booking: React.FC<IBookingsProps> = (props) => {
   const { bookings } = props
 
   return (
-    <Table columns={columns} dataSource={bookings} />
+    <Table columns={columns} dataSource={bookings} rowKey={(record) => record._id} />
   )
 }
 

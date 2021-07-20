@@ -10,6 +10,8 @@ interface ICreateBookingProps {
 
 const { TextArea } = Input
 
+const { REACT_APP_BASE_URL: baseUrl } = process.env
+
 const CreateBooking: React.FC<ICreateBookingProps> = (props) => {
   const { onSetBooking } = props
   const [visible, setVisible] = useState<boolean>(false)
@@ -18,7 +20,16 @@ const CreateBooking: React.FC<ICreateBookingProps> = (props) => {
 
   const handleOk = useCallback(async () => {
     try {
-      const values = await form.validateFields()
+      await form.validateFields()
+    } catch (error) {
+      console.log('value Error: ', error)
+      return form.setFields([
+        ...error.errorFields
+      ])
+    }
+
+    try {
+      const values = await form.getFieldsValue()
       const modifiedValues = {
         bookingNo: values.bookingNo,
         remarks: values.remarks,
@@ -31,7 +42,7 @@ const CreateBooking: React.FC<ICreateBookingProps> = (props) => {
           location: values.departureLocation
         }
       }
-      const result = await axios.post('http://localhost:8000/booking/create', modifiedValues)
+      const result = await axios.post(`${baseUrl}/booking/create`, modifiedValues)
       if (result.status === 200 && result.data) {
         onSetBooking(bookings => {
           const newBookings = [...bookings]
@@ -41,7 +52,7 @@ const CreateBooking: React.FC<ICreateBookingProps> = (props) => {
         setVisible(false)
       }
     } catch (error) {
-      console.log('value Error: ', error)
+      console.log('http error: ', error)
       form.setFields([
         ...error.errorFields
       ])

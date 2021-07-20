@@ -4,12 +4,14 @@ import Nav from '../../layout/Nav'
 import Booking from '../../components/booking'
 import CreateBooking from '../../components/booking/create'
 
+const { REACT_APP_BASE_URL: baseUrl } = process.env
+
 const BookingPage: React.FC = (props) => {
   const [bookings, setBookings] = useState<any[]>([])
 
   useEffect(() => {
     (async () => {
-      const result = await axios.get('http://localhost:8000/booking')
+      const result = await axios.get(`${baseUrl}/booking`)
       if (result && result.data) {
         setBookings(result.data)
       }
