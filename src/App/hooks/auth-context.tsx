@@ -4,7 +4,7 @@ import { Spin } from 'antd'
 
 import { auth } from '../../firebase'
 
-const baseUrl = process.env.REACT_APP_BASE_URL
+const { REACT_APP_BASE_URL: baseUrl } = process.env
 
 type AuthContextType = {
   isLoggedIn: boolean;
@@ -102,7 +102,7 @@ const AuthContextProvider: React.FC = (props) => {
 
   const resetPassword = useCallback<(email: string) => void> ((email) => {
     const config = {
-      url: 'http://localhost:3000/auth/login',
+      url: `${baseUrl}/auth/login`,
       handleCodeInApp: true
     }
     return auth.sendPasswordResetEmail(email, config)

@@ -9,8 +9,11 @@ import ResetPassword from '../pages/auth/reset-password'
 
 import { PublicRoute, PrivateRoute } from './route'
 import ShipmentPage from '../pages/shipment'
+import CreateShipmentPage from '../pages/shipment/create'
 import BookingPage from '../pages/booking'
-import PurchaseOrderPage from '../pages/purchase-order/view'
+import ViewBookingPage from '../pages/booking/view'
+import PurchaseOrderPage from '../pages/purchase-order'
+import ViewPurchaseOrderPage from '../pages/purchase-order/view'
 
 const AppRouter = () => {
   return (
@@ -29,12 +32,24 @@ const AppRouter = () => {
           <ResetPassword />
         </PublicRoute>
 
+        <PrivateRoute path='/booking/:id'>
+          <ViewBookingPage />
+        </PrivateRoute>
+
         <PrivateRoute path='/booking'>
           <BookingPage />
         </PrivateRoute>
 
+        <PrivateRoute path='/purchase-order/:id'>
+          <ViewPurchaseOrderPage />
+        </PrivateRoute>
+
         <PrivateRoute path='/purchase-order'>
           <PurchaseOrderPage />
+        </PrivateRoute>
+
+        <PrivateRoute path='/shipment/create'>
+          <CreateShipmentPage />
         </PrivateRoute>
 
         <PrivateRoute path='/'>
