@@ -2,10 +2,16 @@ import React, { useState, useCallback } from 'react'
 import { Form, Input, Button, DatePicker, Modal } from 'antd'
 import moment from 'moment'
 import { randomIdGenerator } from '../../utils/idGenerators'
+import axios from 'axios'
+
+interface ICreateBookingProps {
+  onSetBooking: React.Dispatch<React.SetStateAction<any[]>>;
+}
 
 const { TextArea } = Input
 
-const CreateBooking: React.FC = (props) => {
+const CreateBooking: React.FC<ICreateBookingProps> = (props) => {
+  const { onSetBooking } = props
   const [visible, setVisible] = useState<boolean>(false)
 
   const [form] = Form.useForm()
@@ -25,15 +31,22 @@ const CreateBooking: React.FC = (props) => {
           location: values.departureLocation
         }
       }
-      console.log('modifiedValues', modifiedValues)
-      setVisible(false)
+      const result = await axios.post('http://localhost:8000/booking/create', modifiedValues)
+      if (result.status === 200 && result.data) {
+        onSetBooking(bookings => {
+          const newBookings = [...bookings]
+          newBookings.push(result.data)
+          return newBookings
+        })
+        setVisible(false)
+      }
     } catch (error) {
       console.log('value Error: ', error)
       form.setFields([
         ...error.errorFields
       ])
     }
-  }, [form])
+  }, [form, onSetBooking])
 
   const handleCancel = useCallback(
     () => {

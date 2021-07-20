@@ -1,6 +1,11 @@
 import React from 'react'
 import { Table, Tag } from 'antd'
 import { Link } from 'react-router-dom'
+import moment from 'moment'
+
+interface IBookingsProps {
+  bookings: any[];
+}
 
 const columns = [
   {
@@ -17,7 +22,7 @@ const columns = [
       return (
         <>
           <Tag color='geekblue'>
-            {arrival.date}
+            {moment(arrival.date).format('YYYY-MM-DD')}
           </Tag>
           <Tag color='green'>
             {arrival.location}
@@ -34,7 +39,7 @@ const columns = [
       return (
         <>
           <Tag color='geekblue'>
-            {arrival.date}
+            {moment(arrival.date).format('YYYY-MM-DD')}
           </Tag>
           <Tag color='volcano'>
             {arrival.location}
@@ -45,35 +50,11 @@ const columns = [
   }
 ]
 
-const data = [
-  {
-    key: '1',
-    bookingNo: 'ZRWV593355666',
-    departure: { date: '2021-07-13', location: 'Los Angeles, CA' },
-    arrival: { date: '2021-07-19', location: 'Penang, Malaysia' },
-    remarks: 'New York'
-  },
-  {
-    key: '2',
-    bookingNo: 'YEJZ041336228',
-    departure: { date: '2021-07-13', location: 'Los Angeles, CA' },
-    arrival: { date: '2021-07-19', location: 'Penang, Malaysia' },
-    remarks: undefined
+const Booking: React.FC<IBookingsProps> = (props) => {
+  const { bookings } = props
 
-  },
-  {
-    key: '3',
-    bookingNo: 'YEJZ041336228',
-    departure: { date: '2021-07-13', location: 'Los Angeles, CA' },
-    arrival: { date: '2021-07-19', location: 'Penang, Malaysia' },
-    remarks: 'Yup'
-
-  }
-]
-
-const Booking: React.FC = () => {
   return (
-    <Table columns={columns} dataSource={data} />
+    <Table columns={columns} dataSource={bookings} />
   )
 }
 
