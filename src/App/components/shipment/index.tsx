@@ -1,82 +1,64 @@
 import React from 'react'
 import { Table, Tag, Space } from 'antd'
+import { Link } from 'react-router-dom'
+
+interface IShipmentProps {
+  shipments: any[]
+}
 
 const columns = [
   {
     title: 'Purchase Order',
-    dataIndex: 'name',
-    key: 'name',
-    render: (text: any) => <a>{text}</a>
-  },
-  {
-    title: 'Vendor',
-    dataIndex: 'age',
-    key: 'age'
+    key: 'purchaseOrder',
+    render: (record: Record<any, any>) => {
+      return (
+        <Link to={`/purchase-order/${record.purchaseOrderNo.purchaseOrderNo}`} target='_blank'>
+          {record.purchaseOrderNo.purchaseOrderNo}
+        </Link>
+      )
+    }
   },
   {
     title: 'Booking',
-    dataIndex: 'address',
-    key: 'address'
+    key: 'booking',
+    render: (record: Record<any, any>) => {
+      return (
+        <Link to={`/booking/${record.bookingNo.bookingNo}`} target='_blank'>
+          {record.bookingNo.bookingNo}
+        </Link>
+      )
+    }
+
   },
   {
     title: 'Status',
-    key: 'tags',
-    dataIndex: 'tags',
-    render: (tags: any) => (
-      <>
-        {tags.map((tag: any) => {
-          let color = tag.length > 5 ? 'geekblue' : 'green'
-          if (tag === 'loser') {
-            color = 'volcano'
-          }
-          return (
-            <Tag color={color} key={tag}>
-              {tag.toUpperCase()}
-            </Tag>
-          )
-        })}
-      </>
-    )
-  },
-  {
-    title: 'Note',
-    key: 'action',
-    render: (text: string, record: any) => (
-      <Space size='middle'>
-        <a>Invite {record.name}</a>
-        <a>Delete</a>
-      </Space>
-    )
+    key: 'status',
+    dataIndex: 'status',
+    render: (status: string) => {
+      let color: string
+      if (status === 'CREATED') {
+        color = 'geekblue'
+      } else if (status === 'FULFILLED') {
+        color = 'green'
+      } else if (status === 'CANCELLED') {
+        color = 'volcano'
+      } else {
+        color = 'cyan'
+      }
+
+      return (
+        <Tag color={color}>
+          {status}
+        </Tag>
+      )
+    }
   }
 ]
 
-const data = [
-  {
-    key: '1',
-    name: 'John Brown',
-    age: 32,
-    address: 'New York No. 1 Lake Park',
-    tags: ['nice', 'developer']
-  },
-  {
-    key: '2',
-    name: 'Jim Green',
-    age: 42,
-    address: 'London No. 1 Lake Park',
-    tags: ['loser']
-  },
-  {
-    key: '3',
-    name: 'Joe Black',
-    age: 32,
-    address: 'Sidney No. 1 Lake Park',
-    tags: ['cool', 'teacher']
-  }
-]
-
-const Shipment: React.FC = () => {
+const Shipment: React.FC<IShipmentProps> = (props) => {
+  const { shipments } = props
   return (
-    <Table columns={columns} dataSource={data} />
+    <Table columns={columns} dataSource={shipments} rowKey={(record) => record._id} />
   )
 }
 
