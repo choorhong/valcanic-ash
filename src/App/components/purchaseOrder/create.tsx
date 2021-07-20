@@ -9,6 +9,8 @@ interface ICreatePurchaseOrderProps {
 const { Option } = Select
 const { TextArea } = Input
 
+const { REACT_APP_BASE_URL: baseUrl } = process.env
+
 const CreatePurchaseOrder: React.FC<ICreatePurchaseOrderProps> = (props) => {
   const { onSetOrder } = props
   const [visible, setVisible] = useState<boolean>(false)
@@ -17,8 +19,17 @@ const CreatePurchaseOrder: React.FC<ICreatePurchaseOrderProps> = (props) => {
 
   const handleOk = useCallback(async () => {
     try {
-      const values = await form.validateFields()
-      const result = await axios.post('http://localhost:8000/purchase-order/create', values)
+      await form.validateFields()
+    } catch (error) {
+      console.log('value Error: ', error)
+      return form.setFields([
+        ...error.errorFields
+      ])
+    }
+
+    try {
+      const values = await form.getFieldsValue()
+      const result = await axios.post(`${baseUrl}/purchase-order/create`, values)
       if (result.status === 200 && result.data) {
         onSetOrder(orders => {
           const newOrders = [...orders]
@@ -28,10 +39,7 @@ const CreatePurchaseOrder: React.FC<ICreatePurchaseOrderProps> = (props) => {
         setVisible(false)
       }
     } catch (error) {
-      console.log('value Error: ', error)
-      form.setFields([
-        ...error.errorFields
-      ])
+      console.log('http error: ', error)
     }
   }, [form, onSetOrder])
 

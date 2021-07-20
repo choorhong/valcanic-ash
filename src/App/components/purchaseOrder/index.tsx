@@ -11,7 +11,7 @@ const columns = [
     title: 'Purchase Order',
     dataIndex: 'purchaseOrderNo',
     key: 'purchaseOrderNo',
-    render: (text: string) => <Link to='/purchase-order'>{text}</Link>
+    render: (text: string) => <Link to={`/purchase-order/${text}`} target='_blank'>{text}</Link>
   },
   {
     title: 'Status',
@@ -46,7 +46,8 @@ const columns = [
 const PurchaseOrder: React.FC<IPurchaseOrderProps> = (props) => {
   const { orders } = props
   return (
-    <Table columns={columns} dataSource={orders} />
+    <Table columns={columns} dataSource={orders} rowKey={(record) => record._id} />
+
   )
 }
 

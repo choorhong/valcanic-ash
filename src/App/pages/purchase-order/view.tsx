@@ -1,30 +1,33 @@
 import React, { useEffect, useState } from 'react'
 import Nav from '../../layout/Nav'
-import PurchaseOrder from '../../components/purchaseOrder'
-import CreatePurchaseOrder from '../../components/purchaseOrder/create'
 import axios from 'axios'
+import { useParams } from 'react-router-dom'
+
+interface IViewParams {
+  id: string
+}
 
 const { REACT_APP_BASE_URL: baseUrl } = process.env
 
-const PurchaseOrderPage: React.FC = (props) => {
+const ViewPurchaseOrderPage: React.FC = (props) => {
   const [orders, setOrders] = useState<any[]>([])
+  const params = useParams<IViewParams>()
 
   useEffect(() => {
     (async () => {
-      const result = await axios.get(`${baseUrl}/purchase-order`)
+      const result = await axios.get(`${baseUrl}/purchase-order/${params.id}`)
       if (result && result.data) {
         setOrders(result.data)
       }
     }
     )()
-  }, [])
+  }, [params.id])
 
   return (
     <Nav>
-      <CreatePurchaseOrder onSetOrder={setOrders} />
-      <PurchaseOrder orders={orders} />
+      <pre>{JSON.stringify(orders[0], null, 4)}</pre>
     </Nav>
   )
 }
 
-export default PurchaseOrderPage
+export default ViewPurchaseOrderPage
