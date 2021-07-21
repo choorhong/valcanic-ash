@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import Nav from '../../layout/Nav'
 import axios from 'axios'
-import { useParams } from 'react-router-dom'
+import { useHistory, useParams } from 'react-router-dom'
 import EditShipment from '../../components/shipment/inputs'
 import { Button, Popconfirm } from 'antd'
 import { EditOutlined, LoadingOutlined, ExclamationOutlined } from '@ant-design/icons'
@@ -16,6 +16,7 @@ const ViewShipmentPage: React.FC = () => {
   const [shipment, setShipment] = useState<Record<any, any>>()
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [disabled, setDisabled] = useState<boolean>(true)
+  const history = useHistory()
 
   const params = useParams<IViewParams>()
 
@@ -30,6 +31,16 @@ const ViewShipmentPage: React.FC = () => {
     )()
   }, [params.id])
 
+  const handleDelete = useCallback(
+    async () => {
+      try {
+        await axios.delete(`${baseUrl}/shipment/delete?id=${params.id}`)
+        history.push('/shipment')
+      } catch (error) {
+        console.log('Delete shipment error:', error)
+      }
+    }, [history, params.id])
+
   return (
     <Nav>
       <Button
@@ -41,7 +52,7 @@ const ViewShipmentPage: React.FC = () => {
       </Button>
       <Popconfirm
         title='Are you sure to delete?'
-        onConfirm={() => { console.log('Shipment deleted') }}
+        onConfirm={handleDelete}
         okText='Yes'
         okType='danger'
         cancelText='No'
