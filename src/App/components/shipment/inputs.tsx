@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import { Form, Input, Button, Select } from 'antd'
 import axios from 'axios'
 import DebounceSearch from '../_shared/InputSearch'
@@ -9,9 +9,28 @@ const { TextArea } = Input
 
 const { REACT_APP_BASE_URL: baseUrl } = process.env
 
-const CreateShipment = () => {
+interface IShipmentProps {
+    disabled?: boolean;
+    shipment?: Record<any, any>;
+}
+
+const CreateShipment: React.FC<IShipmentProps> = (props) => {
+  const { disabled, shipment } = props
   const [form] = Form.useForm()
   const history = useHistory()
+
+  const defaultValues = useMemo(() => {
+    if (shipment) {
+      return {
+        purchaseOrderNo: { label: shipment.purchaseOrderNo.purchaseOrderNo, value: shipment.purchaseOrderNo._id },
+        bookingNo: { label: shipment.bookingNo.bookingNo, value: shipment.bookingNo._id },
+        status: shipment.status,
+        remarks: shipment.remarks
+      }
+    }
+
+    return { status: 'CREATED' }
+  }, [shipment])
 
   const handlSubmit = useCallback(async (values) => {
     const val = {
@@ -19,15 +38,21 @@ const CreateShipment = () => {
       bookingNo: values.bookingNo.value,
       purchaseOrderNo: values.purchaseOrderNo.value
     }
+
+    let url = `${baseUrl}/shipment/create`
+    if (shipment) {
+      url = `${baseUrl}/shipment/edit?id=${shipment._id}`
+    }
+
     try {
-      const result = await axios.post(`${baseUrl}/shipment/create`, val)
+      const result = await axios.post(url, val)
       if (result && result.status === 200) {
         history.push('/shipment')
       }
     } catch (error) {
       console.log('value Error: ', error)
     }
-  }, [history])
+  }, [history, shipment])
 
   return (
     <Form
@@ -39,7 +64,7 @@ const CreateShipment = () => {
       wrapperCol={{
         span: 12
       }}
-      initialValues={{ status: 'CREATED' }}
+      initialValues={defaultValues}
       onFinish={handlSubmit}
     >
       <Form.Item
@@ -52,7 +77,7 @@ const CreateShipment = () => {
           }
         ]}
       >
-        <DebounceSearch isPO />
+        <DebounceSearch isPO disabled={disabled} />
       </Form.Item>
 
       <Form.Item
@@ -65,7 +90,7 @@ const CreateShipment = () => {
           }
         ]}
       >
-        <DebounceSearch isBooking />
+        <DebounceSearch isBooking disabled={disabled} />
       </Form.Item>
 
       <Form.Item
@@ -78,7 +103,7 @@ const CreateShipment = () => {
           }
         ]}
       >
-        <Select>
+        <Select disabled={disabled}>
           <Option value='CREATED'>CREATED</Option>
           <Option value='SCHEDULED'>SCHEDULED</Option>
           <Option value='SHIPPED'>SHIPPED</Option>
@@ -92,16 +117,16 @@ const CreateShipment = () => {
         label='Remarks'
         name='remarks'
       >
-        <TextArea rows={4} />
+        <TextArea rows={4} disabled={disabled} />
       </Form.Item>
 
       <Form.Item
         wrapperCol={{
-          offset: 8,
-          span: 16
+          offset: 4,
+          span: 12
         }}
       >
-        <Button type='primary' htmlType='submit'>
+        <Button type='primary' htmlType='submit' disabled={disabled}>
           Submit
         </Button>
       </Form.Item>
