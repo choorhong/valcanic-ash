@@ -4,9 +4,10 @@ import debounce from 'lodash/debounce'
 import axios from 'axios'
 
 interface IInputSearchProps {
-    debounceTimeout?: number,
-    isBooking?: boolean,
-    isPO?: boolean
+    debounceTimeout?: number;
+    isBooking?: boolean;
+    isPO?: boolean;
+    disabled?: boolean
 }
 
 const { REACT_APP_BASE_URL: baseUrl } = process.env
@@ -18,7 +19,6 @@ const InputSearch: React.FC<IInputSearchProps> = (props) => {
 
   const searchOperation = useCallback(
     async (value) => {
-      console.log('val', value)
       // Default to /purchase-order/search
       let url = `${baseUrl}/purchase-order/search`
       if (isBooking) {

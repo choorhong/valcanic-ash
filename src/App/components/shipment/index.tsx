@@ -8,6 +8,17 @@ interface IShipmentProps {
 
 const columns = [
   {
+    title: 'ID',
+    key: 'id',
+    render: (record: Record<any, any>) => {
+      return (
+        <Link to={`/shipment/${record._id}`} target='_blank'>
+          {record._id.slice(-5)}
+        </Link>
+      )
+    }
+  },
+  {
     title: 'Purchase Order',
     key: 'purchaseOrder',
     render: (record: Record<any, any>) => {
